@@ -1,0 +1,518 @@
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+*******************************************UC 1 : Ability to create payroll service database*******************************************
+
+mysql> create database payroll_service;
+Query OK, 1 row affected (0.33 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.07 sec)
+
+mysql> use payroll_service;
+Database changed
+
+7 rows in set (0.07 sec)
+
+mysql> use payroll_service;
+Database changed
+
+*******************************************UC 2 : Ability to create employee payroll table*******************************************
+
+mysql> create table employee_payroll(
+    -> ID int unsigned NOT NULL AUTO_INCREMENT,
+    -> Name varchar(150) NOT NULL,
+    -> Salary double NOT NULL,
+    -> Start_Date date NOT NULL,
+    -> PRIMARY KEY(ID));
+Query OK, 0 rows affected (0.40 sec)
+
+mysql> desc employee_payroll;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| ID         | int unsigned | NO   | PRI | NULL    | auto_increment |
+| Name       | varchar(150) | NO   |     | NULL    |                |
+| Salary     | double       | NO   |     | NULL    |                |
+| Start_Date | date         | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.20 sec)
+
+mysql> alter table employee_payroll alter Start_Date set default "2022-01-01";
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee_payroll;
++------------+--------------+------+-----+------------+----------------+
+| Field      | Type         | Null | Key | Default    | Extra          |
++------------+--------------+------+-----+------------+----------------+
+| ID         | int unsigned | NO   | PRI | NULL       | auto_increment |
+| Name       | varchar(150) | NO   |     | NULL       |                |
+| Salary     | double       | NO   |     | NULL       |                |
+| Start_Date | date         | NO   |     | 2022-01-01 |                |
++------------+--------------+------+-----+------------+----------------+
+4 rows in set (0.01 sec)
+
+*******************************************UC 3 : Create employee payroll data*******************************************
+
+mysql> insert into employee_payroll(Name, Salary, Start_date) values
+    -> ("Rahul", 45000.00, "2022-07-30"),
+    -> ("Sachin", 55000.00, "2022-07-30"),
+    -> ("Vignesh", 45000.00, "2022-07-29");
+Query OK, 3 rows affected (0.08 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+*******************************************UC 4 : Retrive employee payroll data*******************************************
+
+mysql> select * from employee_payroll;
++----+---------+--------+------------+
+| ID | Name    | Salary | Start_Date |
++----+---------+--------+------------+
+|  1 | Rahul   |  45000 | 2022-07-30 |
+|  2 | Sachin  |  55000 | 2022-07-30 |
+|  3 | Vignesh |  45000 | 2022-07-29 |
++----+---------+--------+------------+
+3 rows in set (0.04 sec)
+
+*******************************************UC 5 : Retrive particular employe payroll salary data*******************************************
+
+mysql> select Salary from employee_payroll where Name = 'Rahul';
++--------+
+| Salary |
++--------+
+|  45000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select Salary from employee_payroll where CAST('2022-07-29' AS Date) AND
+DATE(NOW());
++--------+
+| Salary |
++--------+
+|  45000 |
+|  55000 |
+|  45000 |
++--------+
+3 rows in set (0.07 sec)
+
+mysql> select * from employee_payroll where CAST('2022-07-29' AS Date) AND DATE(
+NOW());
++----+---------+--------+------------+
+| ID | Name    | Salary | Start_Date |
++----+---------+--------+------------+
+|  1 | Rahul   |  45000 | 2022-07-30 |
+|  2 | Sachin  |  55000 | 2022-07-30 |
+|  3 | Vignesh |  45000 | 2022-07-29 |
++----+---------+--------+------------+
+3 rows in set (0.00 sec)
+
+*******************************************UC 6 : Add Gender field data to employe payroll table*******************************************
+
+mysql> alter table employee_payroll ADD Gender CHAR(1) AFTER Name;
+Query OK, 0 rows affected (0.14 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee_payroll;
++------------+--------------+------+-----+------------+----------------+
+| Field      | Type         | Null | Key | Default    | Extra          |
++------------+--------------+------+-----+------------+----------------+
+| ID         | int unsigned | NO   | PRI | NULL       | auto_increment |
+| Name       | varchar(150) | NO   |     | NULL       |                |
+| Gender     | char(1)      | YES  |     | NULL       |                |
+| Salary     | double       | NO   |     | NULL       |                |
+| Start_Date | date         | NO   |     | 2022-01-01 |                |
++------------+--------------+------+-----+------------+----------------+
+5 rows in set (0.08 sec)
+
+mysql> desc employee_payroll;
++------------+--------------+------+-----+------------+----------------+
+| Field      | Type         | Null | Key | Default    | Extra          |
++------------+--------------+------+-----+------------+----------------+
+| ID         | int unsigned | NO   | PRI | NULL       | auto_increment |
+| Name       | varchar(150) | NO   |     | NULL       |                |
+| Gender     | char(1)      | YES  |     | NULL       |                |
+| Salary     | double       | NO   |     | NULL       |                |
+| Start_Date | date         | NO   |     | 2022-01-01 |                |
++------------+--------------+------+-----+------------+----------------+
+5 rows in set (0.01 sec)
+
+mysql> select *  from employee_payroll;
++----+---------+--------+--------+------------+
+| ID | Name    | Gender | Salary | Start_Date |
++----+---------+--------+--------+------------+
+|  1 | Rahul   | NULL   |  45000 | 2022-07-30 |
+|  2 | Sachin  | NULL   |  55000 | 2022-07-30 |
+|  3 | Vignesh | NULL   |  45000 | 2022-07-29 |
++----+---------+--------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE employee_payroll set Gender = 'M' where Name = 'Rahul';
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE employee_payroll set Gender = 'M' where Name = 'Sachin' or Name =
+'Vignesh';
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select *  from employee_payroll;
++----+---------+--------+--------+------------+
+| ID | Name    | Gender | Salary | Start_Date |
++----+---------+--------+--------+------------+
+|  1 | Rahul   | M      |  45000 | 2022-07-30 |
+|  2 | Sachin  | M      |  55000 | 2022-07-30 |
+|  3 | Vignesh | M      |  45000 | 2022-07-29 |
++----+---------+--------+--------+------------+
+3 rows in set (0.00 sec)
+
+****************************************************UC 7 : Retrive min,max,sum,avg & count employe payroll data****************************************************
+mysql> select * from employee_payroll;
++----+---------+--------+--------+------------+
+| ID | Name    | Gender | Salary | Start_Date |
++----+---------+--------+--------+------------+
+|  1 | Rahul   | M      |  45000 | 2022-07-30 |
+|  2 | Sachin  | M      |  55000 | 2022-07-30 |
+|  3 | Vignesh | M      |  45000 | 2022-07-29 |
++----+---------+--------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employee_payroll(Name, Gender, Salary)  values
+    -> ("Pooja", "F", 50000),
+    -> ("Neha", "F", 55000),
+    -> ("Vikas", "M", 50000),
+    -> ("Priya", "F", 45000);
+Query OK, 4 rows affected (0.06 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+--------+--------+------------+
+| ID | Name    | Gender | Salary | Start_Date |
++----+---------+--------+--------+------------+
+|  1 | Rahul   | M      |  45000 | 2022-07-30 |
+|  2 | Sachin  | M      |  55000 | 2022-07-30 |
+|  3 | Vignesh | M      |  45000 | 2022-07-29 |
+|  4 | Pooja   | F      |  50000 | 2022-01-01 |
+|  5 | Neha    | F      |  55000 | 2022-01-01 |
+|  6 | Vikas   | M      |  50000 | 2022-01-01 |
+|  7 | Priya   | F      |  45000 | 2022-01-01 |
++----+---------+--------+--------+------------+
+7 rows in set (0.00 sec)
+
+mysql> Select SUm(Salary) from employee_payroll where Gender = 'F' Group By Gender;
++-------------+
+| SUm(Salary) |
++-------------+
+|      150000 |
++-------------+
+1 row in set (0.05 sec)
+
+mysql> Select Sum(Salary) from employee_payroll where Gender = 'F' Group By Gender;
++-------------+
+| Sum(Salary) |
++-------------+
+|      150000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> Select Avg(Salary) from employee_payroll where Gender = 'M' Group By Gender;
++-------------+
+| Avg(Salary) |
++-------------+
+|       48750 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> Select Min(Salary) from employee_payroll where Gender = 'F' Group By Gender;
++-------------+
+| Min(Salary) |
++-------------+
+|       45000 |
++-------------+
+1 row in set (0.05 sec)
+
+mysql> Select Max(Salary) from employee_payroll where Gender = 'M' Group By Gender;
++-------------+
+| Max(Salary) |
++-------------+
+|       55000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) as 'Male count' from employee_payroll where Gender = 'M';
+
++------------+
+| Male count |
++------------+
+|          4 |
++------------+
+1 row in set (0.04 sec)
+
+mysql> select count(*) as 'Female count' from employee_payroll where Gender = 'F';
++--------------+
+| Female count |
++--------------+
+|            3 |
++--------------+
+1 row in set (0.00 sec)
+
+
+****************************************************UC 8 : Alter employe payroll to add Phone,address & department****************************************************
+
+mysql> select * from employee_payroll;
++----+---------+--------+--------+------------+
+| ID | Name    | Gender | Salary | Start_Date |
++----+---------+--------+--------+------------+
+|  1 | Rahul   | M      |  45000 | 2022-07-30 |
+|  2 | Sachin  | M      |  55000 | 2022-07-30 |
+|  3 | Vignesh | M      |  45000 | 2022-07-29 |
+|  4 | Pooja   | F      |  50000 | 2022-01-01 |
+|  5 | Neha    | F      |  55000 | 2022-01-01 |
+|  6 | Vikas   | M      |  50000 | 2022-01-01 |
+|  7 | Priya   | F      |  45000 | 2022-01-01 |
++----+---------+--------+--------+------------+
+7 rows in set (0.14 sec)
+
+mysql> alter table employee_payroll ADD Phone bigint NOT NULL After Name;
+Query OK, 0 rows affected, 1 warning (0.35 sec)
+Records: 0  Duplicates: 0  Warnings: 1
+
+mysql> alter table employee_payroll ADD Address varchar(250) After Phone;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> alter table employee_payroll ADD Department varchar(150) NOT NULL After A
+ddress;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_payroll alter Address set default "Mumbai" ;
+Query OK, 0 rows affected (0.44 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+
+mysql> desc employee_payroll;
++------------+--------------+------+-----+------------+----------------+
+| Field      | Type         | Null | Key | Default    | Extra          |
++------------+--------------+------+-----+------------+----------------+
+| ID         | int unsigned | NO   | PRI | NULL       | auto_increment |
+| Name       | varchar(150) | NO   |     | NULL       |                |
+| Phone      | bigint       | NO   |     | NULL       |                |
+| Address    | varchar(250) | YES  |     | Mumbai     |                |
+| Department | varchar(150) | NO   |     | NULL       |                |
+| Gender     | char(1)      | YES  |     | NULL       |                |
+| Salary     | double       | NO   |     | NULL       |                |
+| Start_Date | date         | NO   |     | 2022-01-01 |                |
++------------+--------------+------+-----+------------+----------------+
+8 rows in set (0.00 sec)
+
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+--------+------------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Salary | Start_Date |
++----+---------+------------+-----------+------------------+--------+--------+------------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |  45000 | 2022-07-30 |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |  55000 | 2022-07-30 |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |  45000 | 2022-07-29 |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |  50000 | 2022-01-01 |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |  55000 | 2022-01-01 |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |  50000 | 2022-01-01 |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |  45000 | 2022-01-01 |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |  50000 | 2022-10-01 |
++----+---------+------------+-----------+------------------+--------+--------+------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+--------+------------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Salary | Start_Date |
++----+---------+------------+-----------+------------------+--------+--------+------------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |  45000 | 2022-07-30 |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |  55000 | 2022-07-30 |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |  45000 | 2022-07-29 |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |  50000 | 2022-01-01 |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |  55000 | 2022-01-01 |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |  50000 | 2022-01-01 |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |  45000 | 2022-01-01 |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |  50000 | 2022-10-01 |
++----+---------+------------+-----------+------------------+--------+--------+------------+
+8 rows in set (0.00 sec)
+
+
+*********************************UC 9 : Alter employe payroll to add deductions,taxable amount,income tax & net pay*******************************************
+
+mysql> alter table employee_payroll RENAME COLUMN Salary to Basic_Pay;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+-----------+------------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Basic_Pay | Start_Date |
++----+---------+------------+-----------+------------------+--------+-----------+------------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |     45000 | 2022-07-30 |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |     55000 | 2022-07-30 |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |     45000 | 2022-07-29 |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |     50000 | 2022-01-01 |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |     55000 | 2022-01-01 |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |     50000 | 2022-01-01 |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |     45000 | 2022-01-01 |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |     50000 | 2022-10-01 |
++----+---------+------------+-----------+------------------+--------+-----------+------------+
+8 rows in set (0.00 sec)
+
+mysql> alter table employee_payroll
+    -> add Deduction int,
+    -> add Taxable_Pay int,
+    -> add Income_Tax int,
+    -> add Net_yay int;
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Basic_Pay | Start_Date | Deduction | Taxable_Pay | Income_Tax | Net_yay |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |     45000 | 2022-07-30 |      NULL |        NULL |       NULL |    NULL |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |     55000 | 2022-07-30 |      NULL |        NULL |       NULL |    NULL |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |     45000 | 2022-07-29 |      NULL |        NULL |       NULL |    NULL |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |     50000 | 2022-01-01 |      NULL |        NULL |       NULL |    NULL |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |     55000 | 2022-01-01 |      NULL |        NULL |       NULL |    NULL |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |     50000 | 2022-01-01 |      NULL |        NULL |       NULL |    NULL |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |     45000 | 2022-01-01 |      NULL |        NULL |       NULL |    NULL |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |     50000 | 2022-10-01 |      NULL |        NULL |       NULL |    NULL |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+8 rows in set (0.00 sec)
+
+mysql> update employee_payroll set Deduction=(basic_pay*0.1) where id!=0;
+Query OK, 8 rows affected (0.07 sec)
+Rows matched: 8  Changed: 8  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Basic_Pay | Start_Date | Deduction | Taxable_Pay | Income_Tax | Net_yay |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |     45000 | 2022-07-30 |      4500 |        NULL |       NULL |    NULL |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |     55000 | 2022-07-30 |      5500 |        NULL |       NULL |    NULL |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |     45000 | 2022-07-29 |      4500 |        NULL |       NULL |    NULL |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |     50000 | 2022-01-01 |      5000 |        NULL |       NULL |    NULL |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |     55000 | 2022-01-01 |      5500 |        NULL |       NULL |    NULL |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |     50000 | 2022-01-01 |      5000 |        NULL |       NULL |    NULL |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |     45000 | 2022-01-01 |      4500 |        NULL |       NULL |    NULL |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |     50000 | 2022-10-01 |      5000 |        NULL |       NULL |    NULL |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+8 rows in set (0.00 sec)
+
+mysql> update employee_payroll set Taxable_Pay = (Basic_Pay-Deduction) where id!=0;
+Query OK, 8 rows affected (0.06 sec)
+Rows matched: 8  Changed: 8  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Basic_Pay | Start_Date | Deduction | Taxable_Pay | Income_Tax | Net_yay |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |     45000 | 2022-07-30 |      4500 |       40500 |       NULL |    NULL |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |     55000 | 2022-07-30 |      5500 |       49500 |       NULL |    NULL |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |     45000 | 2022-07-29 |      4500 |       40500 |       NULL |    NULL |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |     50000 | 2022-01-01 |      5000 |       45000 |       NULL |    NULL |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |     55000 | 2022-01-01 |      5500 |       49500 |       NULL |    NULL |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |     50000 | 2022-01-01 |      5000 |       45000 |       NULL |    NULL |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |     45000 | 2022-01-01 |      4500 |       40500 |       NULL |    NULL |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |     50000 | 2022-10-01 |      5000 |       45000 |       NULL |    NULL |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+8 rows in set (0.00 sec)
+
+mysql> update employee_payroll set Income_Tax = (Taxable_Pay*0.2) where id!=0;
+Query OK, 8 rows affected (0.01 sec)
+Rows matched: 8  Changed: 8  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Basic_Pay | Start_Date | Deduction | Taxable_Pay | Income_Tax | Net_yay |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |     45000 | 2022-07-30 |      4500 |       40500 |       8100 |    NULL |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |     55000 | 2022-07-30 |      5500 |       49500 |       9900 |    NULL |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |     45000 | 2022-07-29 |      4500 |       40500 |       8100 |    NULL |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |     50000 | 2022-01-01 |      5000 |       45000 |       9000 |    NULL |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |     55000 | 2022-01-01 |      5500 |       49500 |       9900 |    NULL |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |     50000 | 2022-01-01 |      5000 |       45000 |       9000 |    NULL |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |     45000 | 2022-01-01 |      4500 |       40500 |       8100 |    NULL |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |     50000 | 2022-10-01 |      5000 |       45000 |       9000 |    NULL |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+8 rows in set (0.00 sec)
+
+mysql> update employee_payroll set Net_yay = (Taxable_Pay-Income_Tax) where id!=0;
+Query OK, 8 rows affected (0.06 sec)
+Rows matched: 8  Changed: 8  Warnings: 0
+
+mysql> alter table employee_payroll RENAME COLUMN Net_yay to Net_Pay;
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Basic_Pay | Start_Date | Deduction | Taxable_Pay | Income_Tax | Net_Pay |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |     45000 | 2022-07-30 |      4500 |       40500 |       8100 |   32400 |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |     55000 | 2022-07-30 |      5500 |       49500 |       9900 |   39600 |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |     45000 | 2022-07-29 |      4500 |       40500 |       8100 |   32400 |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |     50000 | 2022-01-01 |      5000 |       45000 |       9000 |   36000 |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |     55000 | 2022-01-01 |      5500 |       49500 |       9900 |   39600 |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |     50000 | 2022-01-01 |      5000 |       45000 |       9000 |   36000 |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |     45000 | 2022-01-01 |      4500 |       40500 |       8100 |   32400 |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |     50000 | 2022-10-01 |      5000 |       45000 |       9000 |   36000 |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+8 rows in set (0.00 sec)
+
+
+****************************************************UC 10 : Make Terissa part of HR & Marketing department****************************************************
+
+mysql> insert into employee_payroll values
+    -> (9, "Terissa", 9967321456, "Bangalore", "Marketing", "F", 50000, "2022-10-01", 50000, 45000, 9000, 36000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee_payroll;
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+| ID | Name    | Phone      | Address   | Department       | Gender | Basic_Pay | Start_Date | Deduction | Taxable_Pay | Income_Tax | Net_Pay |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+|  1 | Rahul   | 9967123456 | Mumbai    | Code Development | M      |     45000 | 2022-07-30 |      4500 |       40500 |       8100 |   32400 |
+|  2 | Sachin  | 9967123457 | Bangalore | Code Development | M      |     55000 | 2022-07-30 |      5500 |       49500 |       9900 |   39600 |
+|  3 | Vignesh | 9967123458 | Mumbai    | Code Development | M      |     45000 | 2022-07-29 |      4500 |       40500 |       8100 |   32400 |
+|  4 | Pooja   | 9967123450 | Mumbai    | Marketing        | F      |     50000 | 2022-01-01 |      5000 |       45000 |       9000 |   36000 |
+|  5 | Neha    | 9967123451 | Bangalore | HR               | F      |     55000 | 2022-01-01 |      5500 |       49500 |       9900 |   39600 |
+|  6 | Vikas   | 9967123452 | Mumbai    | Marketing        | M      |     50000 | 2022-01-01 |      5000 |       45000 |       9000 |   36000 |
+|  7 | Priya   | 9967123453 | Mumbai    | HR               | F      |     45000 | 2022-01-01 |      4500 |       40500 |       8100 |   32400 |
+|  8 | Terissa | 9967321456 | Bangalore | HR               | F      |     50000 | 2022-10-01 |      5000 |       45000 |       9000 |   36000 |
+|  9 | Terissa | 9967321456 | Bangalore | Marketing        | F      |     50000 | 2022-10-01 |     50000 |       45000 |       9000 |   36000 |
++----+---------+------------+-----------+------------------+--------+-----------+------------+-----------+-------------+------------+---------+
+9 rows in set (0.00 sec)
+
+mysql> select * from employee_payroll where name = "Terissa";
++----+---------+------------+-----------+------------+--------+-----------+------------+-----------+-------------+------------+---------+
+| ID | Name    | Phone      | Address   | Department | Gender | Basic_Pay | Start_Date | Deduction | Taxable_Pay | Income_Tax | Net_Pay |
++----+---------+------------+-----------+------------+--------+-----------+------------+-----------+-------------+------------+---------+
+|  8 | Terissa | 9967321456 | Bangalore | HR         | F      |     50000 | 2022-10-01 |      5000 |       45000 |       9000 |   36000 |
+|  9 | Terissa | 9967321456 | Bangalore | Marketing  | F      |     50000 | 2022-10-01 |     50000 |       45000 |       9000 |   36000 |
++----+---------+------------+-----------+------------+--------+-----------+------------+-----------+-------------+------------+---------+
+2 rows in set (0.00 sec)
+
